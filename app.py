@@ -32,8 +32,8 @@ def setup_rag_environment():
     texts = text_splitter.split_text(raw_text)
 
     # 2. Embedding Modeli ve Vektör Veritabanı Oluşturma
-    # KRİTİK DÜZELTME: Embedding model adı 'embedding-001' yerine 'text-embedding-004' olarak güncellendi.
-    embeddings = GoogleGenerativeAIEmbeddings(model="text-embedding-004") 
+    # KRİTİK DÜZELTME: Model adını API'nin beklediği 'models/text-embedding-004' tam yoluna güncelliyoruz.
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004") 
     vectorstore = FAISS.from_texts(texts, embeddings)
     
     return vectorstore
