@@ -4,6 +4,6 @@ pandas
 scikit-learn
 langchain
 langchain-google-genai
-google-generativeai
+google-generativeai==0.8.2
 faiss-cpu
 tiktoken
