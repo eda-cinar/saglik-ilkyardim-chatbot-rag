@@ -5,5 +5,5 @@ Mide bulantısı: "Hafif durumlarda dinlenme ve sıvı alımı, ısrarcı kusma 
 Zehirlenme şüphesi: "Eğer kimyasal/ilaç alımı şüphesi varsa 112'yi arayın ve yanınızdaki maddelerin bilgisini paylaşın."
 Şiddetli alerji (anafilaksi): "Nefes darlığı, dudaklarda/boğazda şişme varsa acil adrenalin (EpiPen) ve 112 gereklidir."
 Kalp Krizi	Göğüs ağrısı, terleme, nefes darlığı: "Bu belirtiler varsa acil servis aranmalı (112)."
-Hipertansiyon Krizi:	"Ani çok yüksek tansiyon, baş ağrısı, görme bozukluğu varsa tıbbi değerlendirme gerektirir."
+Hiper tansiyon Krizi:	"Ani çok yüksek tansiyon, baş ağrısı, görme bozukluğu varsa tıbbi değerlendirme gerektirir."
 Diyabet Hipoglisemi	Şeker düşmesi: "Bilinçli kişiye şekerli bir içecek veya glukoz verin; bilinç kaybı varsa acil yardım çağırın."
