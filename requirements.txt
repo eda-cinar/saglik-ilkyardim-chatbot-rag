@@ -1,0 +1,7 @@
+
+streamlit
+pandas
+scikit-learn
+langchain
+langchain-google-genai
+google-generativeai
