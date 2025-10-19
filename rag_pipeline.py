@@ -26,14 +26,16 @@ def retrieve(query, top_k=3):
 
 # rag_pipeline.py dosyasındaki rag_answer fonksiyonunu düzenleme
 
+# rag_pipeline.py dosyasındaki rag_answer fonksiyonunun doğru hali
+
 def rag_answer(query):
     retrieved_docs = retrieve(query)
     context = "\n".join(retrieved_docs)
     prompt = f"Aşağıdaki bilgiler ışığında soruya net bir yanıt ver:\n\nKontekst:\n{context}\n\nSoru: {query}\nYanıt:"
     model = genai.GenerativeModel("gemini-2.5-flash")
     
-    # **Yeni Ekleme:** timeout parametresi ekleyin (örneğin 60 saniye)
-    # Bu, API'ye yanıt vermek için daha uzun süre tanır.
-    response = model.generate_content(prompt, request_options={"timeout": 60}) 
+    # DÜZELTME: request_options={"timeout": 60} yerine 
+    # timeout=60 parametresini doğrudan kullanın.
+    response = model.generate_content(prompt, timeout=60) 
     
     return response.text
