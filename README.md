@@ -34,9 +34,9 @@ Veri seti üç dosyadan oluşur:
 ## ☁️ Web Arayüzü
 Streamlit tabanlı bir sohbet arayüzü bulunmaktadır.
 Kullanıcı “Elimi kestim, ne yapmalıyım?” gibi sorular yöneltebilir.
+chatbot web: https://saglik-ilkyardim-chatbot-rag-hgcostnve4dah9w7xa7adu.streamlit.app/
 
-## 🌐 Deploy
-Projeyi Streamlit Cloud veya HuggingFace Spaces üzerinde yayınlayabilirsiniz.
+
 
 ---
 📍 **Hazırlayan:** Eda Çınar  
