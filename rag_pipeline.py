@@ -8,7 +8,7 @@ import google.generativeai as genai
 # YENİ EKLEMELER
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import FAISS # Vektör Veritabanı (Yerel)
+from langchain_community.vectorstores import FAISS 
 from langchain.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
