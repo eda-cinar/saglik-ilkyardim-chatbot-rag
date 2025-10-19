@@ -15,7 +15,7 @@ from langchain.chains import RetrievalQA
 
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 
 # Veri yükleme
 data_files = ["data/ilk_yardim_bilgileri.txt", "data/saglik_onerileri.txt", "data/acil_durumlar.txt"]
