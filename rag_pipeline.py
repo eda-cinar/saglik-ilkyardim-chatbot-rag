@@ -42,7 +42,10 @@ texts = text_splitter.split_text(raw_text)
 
 # 2. Embedding Modeli ve Vektör Veritabanı Oluşturma
 # Gemini'nin embedding modelini kullanma
-embeddings = GoogleGenerativeAIEmbeddings(model="embedding-001")
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="embedding-001",
+    google_api_key=os.getenv("GOOGLE_API_KEY") # API key'i açıkça belirtin
+)
 
 # FAISS (Vektör Veritabanı) oluşturma
 # Bu adım, her bir metin parçasını vektöre çevirip veritabanına kaydeder
@@ -58,11 +61,11 @@ vectorstore = FAISS.from_texts(texts, embeddings)
 
 def rag_answer(query):
     # LLM Modelini Tanımlama
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
-        temperature=0.3,
-        # API anahtarı genai.configure() ile otomatik alınır
-    )
+   llm = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    temperature=0.3,
+    google_api_key=os.getenv("GOOGLE_API_KEY") # API key'i açıkça belirtin
+)
     
     # 1. Retrieval (Arama) Bileşenini Tanımlama
     # Vektör veritabanını arama aracı olarak kullanır (k=3 ile en alakalı 3 belgeyi çeker)
