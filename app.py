@@ -35,7 +35,7 @@ def setup_rag_environment():
 
     # 2. Embedding Modeli ve Vektör Veritabanı Oluşturma
     # API key, os.getenv'den otomatik olarak okunur.
-    embeddings = GoogleGenerativeAIEmbeddings(model="embedding-001") 
+    embeddings = GoogleGenerativeAIEmbeddings(model="embedding-004") 
     vectorstore = FAISS.from_texts(texts, embeddings)
     
     return vectorstore
