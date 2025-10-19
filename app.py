@@ -7,9 +7,6 @@ from langchain_community.vectorstores import FAISS
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
-# API Anahtarı Ayarı (Sadece güvenilir bir Streamlit Secrets kullanımı için)
-# genai.configure(api_key=os.getenv("GOOGLE_API_KEY")) # Artık LLM/Embeddings sınıfına direkt verilecek
-
 st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
 st.title("🏥 Sağlık ve İlk Yardım Chatbotu")
 st.write("RAG mimarili yapay zeka destekli sağlık asistanına hoş geldiniz!")
@@ -22,11 +19,12 @@ def setup_rag_environment():
     raw_text = ""
     for file in data_files:
         try:
+            # Dosya okuma işlemi, Streamlit Cloud'da dosyanın varlığını kontrol eder
             with open(file, "r", encoding="utf-8") as f:
                 raw_text += f.read() + "\n"
         except FileNotFoundError:
-            # Gerekirse bu uyarıyı kullanıcıya gösterebiliriz
-            pass
+            st.error(f"Hata: Veri dosyası bulunamadı: {file}")
+            st.stop()
 
     text_splitter = CharacterTextSplitter(
         separator="\n", chunk_size=500, chunk_overlap=100, length_function=len
@@ -34,8 +32,8 @@ def setup_rag_environment():
     texts = text_splitter.split_text(raw_text)
 
     # 2. Embedding Modeli ve Vektör Veritabanı Oluşturma
-    # API key, os.getenv'den otomatik olarak okunur.
-    embeddings = GoogleGenerativeAIEmbeddings(model="embedding-004") 
+    # KRİTİK DÜZELTME: Embedding model adı 'embedding-001' yerine 'text-embedding-004' olarak güncellendi.
+    embeddings = GoogleGenerativeAIEmbeddings(model="text-embedding-004") 
     vectorstore = FAISS.from_texts(texts, embeddings)
     
     return vectorstore
@@ -44,18 +42,18 @@ def setup_rag_environment():
 try:
     vectorstore = setup_rag_environment()
 except Exception as e:
-    st.error("RAG ortamı başlatılamadı. API Anahtarınızı ve Billing ayarlarınızı kontrol edin.")
+    # GoogleGenerativeAIError genellikle API veya model adından kaynaklanır
+    st.error("RAG ortamı başlatılamadı. Model adını, API Anahtarınızı ve Billing ayarlarınızı kontrol edin.")
     st.exception(e)
     st.stop()
 
 
-# --- CHATBOT MANTIĞI (rag_answer fonksiyonu app.py'ye taşındı) ---
+# --- CHATBOT MANTIĞI (rag_answer) ---
 def rag_answer(query, vectorstore):
     # LLM Modelini Tanımlama
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         temperature=0.3
-        # API key ortam değişkeninden alınacak
     )
     
     # 1. Retrieval (Arama) Bileşenini Tanımlama
