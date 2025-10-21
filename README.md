@@ -13,25 +13,28 @@ Veri seti üç dosyadan oluşur:
 - `acil_durumlar.txt`: Acil durum müdahale yönergeleri
 
 ## 🧠 Kullanılan Yöntemler
--I. Retrieval (Bilgi Çekme) Aşamasında Kullanılan Yöntemler (3 Teknik)
+I. Retrieval (Bilgi Çekme) Aşamasında Kullanılan Yöntemler (3 Teknik)
 Bu aşamada amaç, kullanıcının sorusuyla en alakalı metin parçalarını (konteksti) veri setinizden bulmaktır.
-   1-Metin Parçalama (Chunking):
-      Yöntem: CharacterTextSplitter kullanarak büyük metin belgelerinizi (.txt dosyaları) yönetilebilir, küçük parçalara (chunk) bölmek.
-      Amaç: Anlamı kaybetmeden, her bir parçanın Embeddings modeli tarafından etkin bir şekilde vektöre dönüştürülmesini sağlamak ve Büyük Dil Modeli'ne (LLM) gereksiz bilgi göndermekten kaçınmaktır.
-   2-Embedding (Vektörleştirme):
-      Yöntem: GoogleGenerativeAIEmbeddings ve models/text-embedding-004 modelini kullanarak metin parçalarını yüksek boyutlu sayısal vektörlere dönüştürmek.
-      Amaç: İnsan dilindeki anlamsal anlamı yakalamak. Yani "elimi kestim" ile "kesik tedavisi" kelimeleri farklı olsa da, vektör uzayında birbirine yakın olacaklardır.
-   3-Vektör Benzerliği Araması ve Depolama:
-      Yöntem: FAISS (Facebook AI Similarity Search) vektör veritabanını kullanarak, kullanıcının sorusunun vektörü ile depolanan tüm metin parçalarının vektörleri arasındaki Kosinüs Benzerliğini hesaplamak.
-      Amaç: Veri setinizdeki en alakalı (en yüksek benzerlik skoruna sahip) $K$ adet belgeyi (bizim projemizde $K=4$) hızla çekmektir.
+1.	Metin Parçalama (Chunking):
+o	Yöntem: CharacterTextSplitter kullanarak büyük metin belgelerinizi (.txt dosyaları) yönetilebilir, küçük parçalara (chunk) bölmek.
+o	Amaç: Anlamı kaybetmeden, her bir parçanın Embeddings modeli tarafından etkin bir şekilde vektöre dönüştürülmesini sağlamak ve Büyük Dil Modeli'ne (LLM) gereksiz bilgi göndermekten kaçınmaktır.
+2.	Embedding (Vektörleştirme):
+o	Yöntem: GoogleGenerativeAIEmbeddings ve models/text-embedding-004 modelini kullanarak metin parçalarını yüksek boyutlu sayısal vektörlere dönüştürmek.
+o	Amaç: İnsan dilindeki anlamsal anlamı yakalamak. Yani "elimi kestim" ile "kesik tedavisi" kelimeleri farklı olsa da, vektör uzayında birbirine yakın olacaklardır.
+3.	Vektör Benzerliği Araması ve Depolama:
+o	Yöntem: FAISS (Facebook AI Similarity Search) vektör veritabanını kullanarak, kullanıcının sorusunun vektörü ile depolanan tüm metin parçalarının vektörleri arasındaki Kosinüs Benzerliğini hesaplamak.
+o	Amaç: Veri setinizdeki en alakalı (en yüksek benzerlik skoruna sahip) $K$ adet belgeyi (bizim projemizde $K=4$) hızla çekmektir.
+________________________________________
 II. Augmented Generation (Genişletilmiş Yanıt Üretme) Aşamasında Kullanılan Yöntemler (2 Teknik)
 Bu aşamada amaç, çekilen bilgiyi kullanarak kullanıcıya akıcı ve doğru bir yanıt oluşturmaktır.
-   4-Prompt Template (İstem Şablonu Kullanımı):
-      Yöntem: LangChain'den alınan PromptTemplate ile LLM'ye ne yapması gerektiğini açıkça belirten yapılandırılmış bir talimat (istem) göndermek.
-      Amaç: LLM'nin rolünü belirlemek ("ilk yardım ve sağlık asistanı"), çekilen bilgiyi bağlam ({context}) içine yerleştirmek ve LLM'nin yanıt formatını kontrol etmek ("Verilen bilgilerde bu konu hakkında bilgi bulunmamaktadır." gibi bir kısıtlama koymak).
-   5-LLM ile Yanıt Üretme (Generation):
-      Yöntem: Gemini 2.5 Flash (hız ve maliyet etkinliği için) büyük dil modelini kullanarak, çekilen bağlam bilgileri ve kullanıcı sorusu ışığında son, doğal dildeki yanıtı oluşturmak.
-      Amaç: Çekilen ham bilgiyi alarak, bağlam içinde mantıklı, akıcı ve Türkçe bir cevaba dönüştürmektir.
+4.	Prompt Template (İstem Şablonu Kullanımı):
+o	Yöntem: LangChain'den alınan PromptTemplate ile LLM'ye ne yapması gerektiğini açıkça belirten yapılandırılmış bir talimat (istem) göndermek.
+o	Amaç: LLM'nin rolünü belirlemek ("ilk yardım ve sağlık asistanı"), çekilen bilgiyi bağlam ({context}) içine yerleştirmek ve LLM'nin yanıt formatını kontrol etmek ("Verilen bilgilerde bu konu hakkında bilgi bulunmamaktadır." gibi bir kısıtlama koymak).
+5.	LLM ile Yanıt Üretme (Generation):
+o	Yöntem: Gemini 2.5 Flash (hız ve maliyet etkinliği için) büyük dil modelini kullanarak, çekilen bağlam bilgileri ve kullanıcı sorusu ışığında son, doğal dildeki yanıtı oluşturmak.
+o	Amaç: Çekilen ham bilgiyi alarak, bağlam içinde mantıklı, akıcı ve Türkçe bir cevaba dönüştürmektir.
+Bu beş yöntem, RAG mimarisinin temel taşlarını oluşturur ve chatbotumun başarılı bir şekilde çalışmasını sağlar.
+
 
 ## ⚙️ Kurulum
 1. Ortam oluşturun:
