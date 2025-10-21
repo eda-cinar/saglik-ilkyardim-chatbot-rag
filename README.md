@@ -34,9 +34,11 @@ Veri seti üç dosyadan oluşur:
 ## ☁️ Web Arayüzü
 Streamlit tabanlı bir sohbet arayüzü bulunmaktadır.
 Kullanıcı “Elimi kestim, ne yapmalıyım?” gibi sorular yöneltebilir.
-<img width="962" height="402" alt="Ekran görüntüsü 1 2025-10-21 210615" src="https://github.com/user-attachments/assets/356ca2d6-5ce0-458d-a51e-6a75d5c09afe" />
-<img width="1022" height="503" alt="Ekran görüntüsü 2 2025-10-21 210645" src="https://github.com/user-attachments/assets/c3f1e07e-00e1-4d3c-a815-734bc5b00fa6" />
 <img width="976" height="346" alt="Ekran görüntüsü 2025-10-21 210505" src="https://github.com/user-attachments/assets/dff7b29a-a93f-454a-ac84-745fa4bbfaed" />
+
+<img width="962" height="402" alt="Ekran görüntüsü 1 2025-10-21 210615" src="https://github.com/user-attachments/assets/356ca2d6-5ce0-458d-a51e-6a75d5c09afe" />
+
+<img width="1022" height="503" alt="Ekran görüntüsü 2 2025-10-21 210645" src="https://github.com/user-attachments/assets/c3f1e07e-00e1-4d3c-a815-734bc5b00fa6" />
 
 
 
