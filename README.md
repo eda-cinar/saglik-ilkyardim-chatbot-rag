@@ -34,7 +34,14 @@ Veri seti üç dosyadan oluşur:
 ## ☁️ Web Arayüzü
 Streamlit tabanlı bir sohbet arayüzü bulunmaktadır.
 Kullanıcı “Elimi kestim, ne yapmalıyım?” gibi sorular yöneltebilir.
+<img width="962" height="402" alt="Ekran görüntüsü 1 2025-10-21 210615" src="https://github.com/user-attachments/assets/356ca2d6-5ce0-458d-a51e-6a75d5c09afe" />
+
 chatbot web: https://saglik-ilkyardim-chatbot-rag-hgcostnve4dah9w7xa7adu.streamlit.app/
+
+Contact
+Email:edabattalcinar@hotmail.com
+GitHub:https://github.com/eda-cinar
+Linkedin:https://www.linkedin.com/in/eda-çinar-2a8a2b58/
 
 
 
