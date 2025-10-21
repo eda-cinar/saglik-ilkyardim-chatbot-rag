@@ -35,7 +35,6 @@ o	Yöntem: Gemini 2.5 Flash (hız ve maliyet etkinliği için) büyük dil model
 o	Amaç: Çekilen ham bilgiyi alarak, bağlam içinde mantıklı, akıcı ve Türkçe bir cevaba dönüştürmektir.
 Bu beş yöntem, RAG mimarisinin temel taşlarını oluşturur ve chatbotumun başarılı bir şekilde çalışmasını sağlar.
 
-
 ## ⚙️ Kurulum
 1. Ortam oluşturun:
    ```bash
