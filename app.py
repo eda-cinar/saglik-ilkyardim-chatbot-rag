@@ -6,7 +6,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain_text_splitters import CharacterTextSplitter
+from langchain_text_splitters import CharacterTextSplitter 
 
 st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
 st.title("🏥 Sağlık ve İlk Yardım Chatbotu")
