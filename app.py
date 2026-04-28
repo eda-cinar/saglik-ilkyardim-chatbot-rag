@@ -1,15 +1,12 @@
 import streamlit as st
 import os
-import google.generativeai as genai
-
-
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate  # Bu satır genelde değişmedi ama kütüphane yüklü olmalı
+from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
 st.title("🏥 Sağlık ve İlk Yardım Chatbotu")
