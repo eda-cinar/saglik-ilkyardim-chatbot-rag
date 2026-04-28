@@ -63,8 +63,7 @@ def rag_answer(query, vectorstore):
     model="gemini-1.5-flash", # Ön eki kaldırarak sadece ismi yaz
     temperature=0.3,
     google_api_key=os.environ["GOOGLE_API_KEY"]
-
-    )
+ )
     
     retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
     
