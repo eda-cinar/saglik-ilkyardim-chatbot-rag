@@ -8,5 +8,6 @@ pypdf
 faiss-cpu
 sentence-transformers
 python-dotenv
+sentence-transformers
 
 
