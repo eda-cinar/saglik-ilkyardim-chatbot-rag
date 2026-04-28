@@ -8,8 +8,8 @@ from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # --- SAYFA AYARLARI ---
-st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
-st.title("🏥 Sağlık ve İlk Yardım Chatbotu")
+st.set_page_config(page_title="İlk Yardım Chatbotu-ACİLBOT", page_icon="💬")
+st.title("🏥 Sağlık ve İlk Yardım Chatbotu-ACİLBOT")
 st.write("RAG mimarili yapay zeka destekli sağlık asistanına hoş geldiniz!")
 
 # --- API ANAHTARI KONTROLÜ (KRİTİK) ---
@@ -60,9 +60,10 @@ except Exception as e:
 def rag_answer(query, vectorstore):
     # Model ismini güncelledik: gemini-1.5-flash
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        temperature=0.3,
-        google_api_key=os.environ["GOOGLE_API_KEY"]
+    model="gemini-1.5-flash", # Ön eki kaldırarak sadece ismi yaz
+    temperature=0.3,
+    google_api_key=os.environ["GOOGLE_API_KEY"]
+
     )
     
     retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
