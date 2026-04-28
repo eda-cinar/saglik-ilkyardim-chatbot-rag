@@ -7,8 +7,8 @@ from langchain_community.vectorstores import FAISS
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 
-st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
-st.title("🏥 Sağlık ve İlk Yardım Chatbotu")
+st.set_page_config(page_title="İlk Yardım Chatbotu-ACİLBOT", page_icon="💬")
+st.title("🏥 Sağlık ve İlk Yardım Chatbotu-ACİLBOT")
 st.write("RAG mimarili yapay zeka destekli sağlık asistanına hoş geldiniz!")
 
 # --- FAISS VE EMBEDDINGS OLUŞTURMA (SADECE BİR KEZ ÇALIŞIR) ---
