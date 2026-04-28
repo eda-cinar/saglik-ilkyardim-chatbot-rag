@@ -8,4 +8,6 @@ google-generativeai==0.8.2
 faiss-cpu
 tiktoken
 langchain-community 
-
+pypdf
+sentence-transformers
+python-dotenv
