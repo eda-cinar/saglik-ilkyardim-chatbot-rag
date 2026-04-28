@@ -60,7 +60,7 @@ except Exception as e:
 def rag_answer(query, vectorstore):
     # Model ismini güncelledik: gemini-1.5-flash
     llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash", # Ön eki kaldırarak sadece ismi yaz
+    model="gemini-pro", # Ön eki kaldırarak sadece ismi yaz
     version="v1", # API sürümünü beta'dan kararlıya çektik
     temperature=0.3,
     google_api_key=os.environ["GOOGLE_API_KEY"]
