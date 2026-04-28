@@ -5,6 +5,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_text_splitters import CharacterTextSplitter 
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 # --- SAYFA AYARLARI ---
 st.set_page_config(page_title="İlk Yardım Chatbotu", page_icon="💬")
@@ -41,14 +42,11 @@ def setup_rag_environment():
 
     # 3. Embedding ve Vektör Veritabanı
     # google_api_key parametresini açıkça veriyoruz
-    embeddings = GoogleGenerativeAIEmbeddings(
-    model="text-embedding-004", # 'models/' ön ekini kaldırarak deneyelim
-    google_api_key=os.environ["GOOGLE_API_KEY"]
-
-)
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     vectorstore = FAISS.from_texts(texts, embeddings)
-    
+    vectorstore = FAISS.from_texts(texts, embeddings)
     return vectorstore
+
 
 # Vektör veritabanını oluştur
 try:
