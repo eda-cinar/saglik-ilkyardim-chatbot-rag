@@ -1,14 +1,19 @@
 
 streamlit
+langchain>=0.1.0
 pandas
 scikit-learn
 langchain
 langchain-google-genai
+langchain-community>=0.0.10
 google-generativeai==0.8.2
 faiss-cpu
 tiktoken
-langchain-community 
 pypdf
 sentence-transformers
 python-dotenv
 langchain-text-splitters
+google-generativeai
+
+
+
