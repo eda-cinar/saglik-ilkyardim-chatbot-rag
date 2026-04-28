@@ -41,7 +41,7 @@ def setup_rag_environment():
 
     # 3. Embedding ve Vektör Veritabanı
     # google_api_key parametresini açıkça veriyoruz
-   embeddings = GoogleGenerativeAIEmbeddings(
+    embeddings = GoogleGenerativeAIEmbeddings(
     model="models/embedding-001",  # Bu model Google'ın en standart embedding modelidir
     google_api_key=os.environ["GOOGLE_API_KEY"]
 )
