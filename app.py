@@ -64,18 +64,31 @@ def rag_answer(query, _vectorstore):
     
     # 2. API Yapılandırması
     api_key = st.secrets["GOOGLE_API_KEY"]
-    # v1beta yerine doğrudan v1 (kararlı) sürümünü hedefliyoruz
-    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={api_key}"
     
-    # 3. Payload (İstek içeriği)
+    # KRİTİK DEĞİŞİKLİK 1: v1beta üzerinden en kararlı modele gidiyoruz
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
+    
     headers = {'Content-Type': 'application/json'}
     prompt = f"Sen bir ilk yardım asistanısın. Bağlama göre Türkçe yanıt ver.\nBAĞLAM: {context}\nSORU: {query}"
     
+    # KRİTİK DEĞİŞİKLİK 2: Payload yapısı (Gemini Pro için en sade hali)
     data = {
         "contents": [{
             "parts": [{"text": prompt}]
         }]
     }
+
+    # 3. İstek Atma
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    result = response.json()
+
+    if response.status_code == 200:
+        try:
+            return result['candidates'][0]['content']['parts'][0]['text']
+        except Exception as e:
+            return "Yanıt formatı çözülemedi."
+    else:
+        return f"Hata: {response.status_code}. Mesaj: {result.get('error', {}).get('message', 'Bilinmeyen Hata')}"
 
     # 4. Doğrudan İstek Atma
     response = requests.post(url, headers=headers, data=json.dumps(data))
