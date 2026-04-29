@@ -72,7 +72,7 @@ def rag_answer(query, _vectorstore):
 
     # 3. Modeli doğrudan çağır
     # Eğer gemini-1.5-flash hata verirse 'gemini-pro' olarak değiştirilebilir
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-pro')
     response = model.generate_content(prompt)
     
     return response.text
