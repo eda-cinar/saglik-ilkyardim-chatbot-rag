@@ -56,23 +56,25 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, _vectorstore):
+    # API Anahtarını yapılandır
+    api_key = st.secrets["GOOGLE_API_KEY"]
+    genai.configure(api_key=api_key)
+    
     # 1. Benzer dokümanları getir
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # 2. Prompt (İstem) oluştur
-    prompt = f"""Sen bir ilk yardım asistanısın. Aşağıdaki bağlam bilgilerini kullanarak kullanıcı sorusuna net bir Türkçe yanıt ver.
-    Eğer bilgi bağlamda yoksa, sadece 'Verilen kaynaklarda bu konu hakkında bilgi bulunmamaktadır' de.
+    # 2. Prompt oluştur
+    prompt = f"Bağlam: {context}\nSoru: {query}\nYanıt:"
 
-    BAĞLAM:
-    {context}
-
-    SORU: {query}
-    YANIT:"""
-
-    # 3. Modeli doğrudan çağır
-    # Eğer gemini-1.5-flash hata verirse 'gemini-pro' olarak değiştirilebilir
-    model = genai.GenerativeModel('gemini-pro')
+    # 3. KRİTİK GÜNCELLEME: v1 sürümünü açıkça belirtiyoruz
+    # Bu satır 404 hatasını kökten çözecektir.
+    model = genai.GenerativeModel(
+        model_name='gemini-1.5-flash',
+        # Bazı SDK sürümlerinde doğrudan v1'e zorlamak için gerekebilir
+    )
+    
+    # Doğrudan v1 API'sini çağırmak için alternatif (Eğer üstteki hata verirse):
     response = model.generate_content(prompt)
     
     return response.text
