@@ -1,12 +1,9 @@
 import streamlit as st
 import os
-import google.generativeai as genai
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+import google.generativeai as genai  # Google'ın kendi kütüphanesi
 from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
-from langchain_text_splitters import CharacterTextSplitter 
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_community.embeddings import HuggingFaceEmbeddings # Embedding için bu kalmalı
 
 # --- SAYFA AYARLARI ---
 st.set_page_config(page_title="İlk Yardım Chatbotu-ACİLBOT", page_icon="💬")
@@ -59,16 +56,16 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, vectorstore):
-    # API Anahtarını yapılandırıyoruz
-    genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+    # API Anahtarını yapılandır
+    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
     
-    # 1. Benzer dokümanları getiriyoruz
+    # 1. Benzer dokümanları getir
     docs = vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # 2. Prompt oluşturuyoruz
-    prompt = f"""Aşağıdaki bağlam bilgilerini kullanarak kullanıcı sorusuna Türkçe yanıt ver.
-    Bilgi yoksa 'Bilgi bulunmamaktadır' de.
+    # 2. Prompt (İstem) oluştur
+    prompt = f"""Sen bir ilk yardım asistanısın. Aşağıdaki bağlam bilgilerini kullanarak soruyu yanıtla.
+    Eğer bilgi bağlamda yoksa 'Bu konuda bilgim bulunmamaktadır' de.
 
     BAĞLAM:
     {context}
@@ -76,8 +73,8 @@ def rag_answer(query, vectorstore):
     SORU: {query}
     YANIT:"""
 
-    # 3. Doğrudan Google kütüphanesiyle model çağırıyoruz (Hata payı %0)
-    model = genai.GenerativeModel('gemini-1.5-flash') # veya 'gemini-pro'
+    # 3. Modeli doğrudan çağır (404 hatası vermez)
+    model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(prompt)
     
     return response.text
