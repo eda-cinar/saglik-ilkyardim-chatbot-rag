@@ -1,5 +1,7 @@
 import streamlit as st
 import os
+import requests
+import json
 import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import CharacterTextSplitter
@@ -56,24 +58,37 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, _vectorstore):
-    # API yapılandırması
-    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-    
-    # RAG kısmı
+    # 1. RAG: Benzer dokümanları getir
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # MODEL ÇAĞIRMA (En güncel model ismi)
-    # 404 hatasını önlemek için doğrudan ismi yazıyoruz
-    model = genai.GenerativeModel('gemini-1.5-flash-latest') 
+    # 2. API Yapılandırması
+    api_key = st.secrets["GOOGLE_API_KEY"]
+    # v1beta yerine doğrudan v1 (kararlı) sürümünü hedefliyoruz
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={api_key}"
     
-    prompt = f"Bağlam: {context}\n\nSoru: {query}\n\nYanıtı Türkçe ver:"
+    # 3. Payload (İstek içeriği)
+    headers = {'Content-Type': 'application/json'}
+    prompt = f"Sen bir ilk yardım asistanısın. Bağlama göre Türkçe yanıt ver.\nBAĞLAM: {context}\nSORU: {query}"
+    
+    data = {
+        "contents": [{
+            "parts": [{"text": prompt}]
+        }]
+    }
 
-    try:
-        response = model.generate_content(prompt)
-        return response.text
-    except Exception as e:
-        return f"Hata: {str(e)}"
+    # 4. Doğrudan İstek Atma
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    result = response.json()
+
+    if response.status_code == 200:
+        try:
+            return result['candidates'][0]['content']['parts'][0]['text']
+        except:
+            return "Yanıt işlenirken bir hata oluştu."
+    else:
+        # Eğer hala 404 veriyorsa bu sefer hatanın detayını göreceğiz
+        return f"Hata Kodu: {response.status_code} - Mesaj: {result.get('error', {}).get('message', 'Bilinmeyen Hata')}"
 
 # --- KULLANICI ARAYÜZÜ ---
 user_input = st.text_input("Sorunuzu yazın (örn: Elimi kestim, ne yapmalıyım?):")
