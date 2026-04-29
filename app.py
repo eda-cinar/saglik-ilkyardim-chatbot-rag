@@ -42,24 +42,37 @@ vectorstore = setup_rag_environment()
 
 # --- CHATBOT MANTIĞI (GROQ KULLANIMI) ---
 def rag_answer(query, _vectorstore):
-    # Groq istemcisini başlat
     client = Groq(api_key=GROQ_API_KEY)
     
-    # RAG: İlgili metinleri çek
+    # RAG: Veri çekme
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    prompt = f"""Sen bir ilk yardım asistanısın. Aşağıdaki bağlamı kullanarak Türkçe yanıt ver.
-    BAĞLAM: {context}
-    SORU: {query}"""
+    # --- SINIRLANDIRILMIŞ SİSTEM TALİMATI ---
+    system_prompt = """
+    Sen bir ACİLBOT isimli İlk Yardım ve Sağlık asistanısın. 
+    Görevin SADECE ilk yardım, sağlık önerileri ve acil durum müdahaleleri hakkında bilgi vermektir.
+    
+    KURALLAR:
+    1. Eğer soru ilk yardım, sağlık veya tıbbi konularla ilgili DEĞİLSE (örneğin: yemek tarifi, matematik, futbol, genel kültür vb.), şu cevabı ver: 
+       'Ben sadece ilk yardım ve sağlık konularında bilgi vermek üzere eğitildim. Lütfen bu alanlarla ilgili bir soru sorun.'
+    2. Yanıtlarını SADECE sana verilen BAĞLAM bilgilerine dayandır.
+    3. Bağlamda bilgi yoksa, bilmediğini nazikçe belirt.
+    4. Acil durumlarda mutlaka '112 Acil Servis'i arayın' uyarısını yap.
+    """
 
-    # Groq Llama 3 modelini çağır (Işık hızında ve hatasız)
+    user_message = f"BAĞLAM:\n{context}\n\nSORU: {query}"
+
+    # Groq Llama 3 modelini çağır
     chat_completion = client.chat.completions.create(
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": system_prompt}, # Kimlik burada tanımlanıyor
+            {"role": "user", "content": user_message}
+        ],
         model="llama-3.3-70b-versatile",
+        temperature=0.1, # Daha ciddi ve tutarlı cevaplar için sıcaklığı düşürdük
     )
     return chat_completion.choices[0].message.content
-
 # --- ARAYÜZ ---
 user_input = st.text_input("Sorunuzu yazın:")
 
