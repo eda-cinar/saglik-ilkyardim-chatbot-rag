@@ -6,6 +6,7 @@ import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from groq import Groq
 
 # --- SAYFA AYARLARI ---
 st.set_page_config(page_title="İlk Yardım Chatbotu-ACİLBOT", page_icon="💬")
@@ -58,25 +59,28 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, _vectorstore):
-    # 1. RAG: Benzer dokümanları getir
+    # Groq API anahtarını Secrets'tan al (İsmini GROQ_API_KEY yapabilirsin)
+    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+    
+    # RAG: Veri çekme kısmı aynı kalıyor
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # 2. API Yapılandırması
-    api_key = st.secrets["GOOGLE_API_KEY"]
+    # Prompt
+    prompt = f"Bağlam: {context}\n\nSoru: {query}\n\nYanıtı Türkçe ver:"
+
+    # Groq üzerinden Llama 3 modelini çağırıyoruz (Işık hızında çalışır)
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="llama-3.3-70b-versatile",
+    )
     
-    # KRİTİK DEĞİŞİKLİK 1: v1beta üzerinden en kararlı modele gidiyoruz
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
-    
-    headers = {'Content-Type': 'application/json'}
-    prompt = f"Sen bir ilk yardım asistanısın. Bağlama göre Türkçe yanıt ver.\nBAĞLAM: {context}\nSORU: {query}"
-    
-    # KRİTİK DEĞİŞİKLİK 2: Payload yapısı (Gemini Pro için en sade hali)
-    data = {
-        "contents": [{
-            "parts": [{"text": prompt}]
-        }]
-    }
+    return chat_completion.choices[0].message.content
 
     # 3. İstek Atma
     response = requests.post(url, headers=headers, data=json.dumps(data))
