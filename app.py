@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import google.generativeai as genai
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
@@ -58,38 +59,28 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, vectorstore):
-    # Model ismini güncelledik: gemini-1.5-flash
-    llm = ChatGoogleGenerativeAI(
-         model="gemini-pro", 
-         temperature=0.3,
-         google_api_key=os.environ["GOOGLE_API_KEY"]
-    )
+    # API Anahtarını yapılandırıyoruz
+    genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
     
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+    # 1. Benzer dokümanları getiriyoruz
+    docs = vectorstore.similarity_search(query, k=4)
+    context = "\n".join([doc.page_content for doc in docs])
     
-    prompt_template = """Aşağıdaki bağlam bilgileri, ilk yardım ve sağlık konularında hazırlanmıştır. 
-    Verilen bağlamı kullanarak, kullanıcı sorusuna net ve güvenilir bir Türkçe yanıt ver. 
-    Bağlamda bulunmayan bir bilgi sorulursa, "Verilen bilgilerde bu konu hakkında bilgi bulunmamaktadır." diye yanıtla.
+    # 2. Prompt oluşturuyoruz
+    prompt = f"""Aşağıdaki bağlam bilgilerini kullanarak kullanıcı sorusuna Türkçe yanıt ver.
+    Bilgi yoksa 'Bilgi bulunmamaktadır' de.
 
     BAĞLAM:
     {context}
 
-    SORU: {question}
+    SORU: {query}
     YANIT:"""
 
-    PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
-    )
+    # 3. Doğrudan Google kütüphanesiyle model çağırıyoruz (Hata payı %0)
+    model = genai.GenerativeModel('gemini-1.5-flash') # veya 'gemini-pro'
+    response = model.generate_content(prompt)
     
-    qa_chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=retriever,
-        return_source_documents=False,
-        chain_type_kwargs={"prompt": PROMPT}
-    )
-    
-    return qa_chain.run(query)
+    return response.text
 
 # --- KULLANICI ARAYÜZÜ ---
 user_input = st.text_input("Sorunuzu yazın (örn: Elimi kestim, ne yapmalıyım?):")
