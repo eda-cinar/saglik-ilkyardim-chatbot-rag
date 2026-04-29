@@ -59,10 +59,10 @@ except Exception as e:
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, vectorstore):
     # Model ismini güncelledik: gemini-1.5-flash
-   llm = ChatGoogleGenerativeAI(
-        model="gemini-pro", 
-        temperature=0.3,
-        google_api_key=os.environ["GOOGLE_API_KEY"]
+    llm = ChatGoogleGenerativeAI(
+         model="gemini-pro", 
+         temperature=0.3,
+         google_api_key=os.environ["GOOGLE_API_KEY"]
     )
     
     retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
