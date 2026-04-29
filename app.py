@@ -56,28 +56,24 @@ except Exception as e:
 
 # --- CHATBOT MANTIĞI ---
 def rag_answer(query, _vectorstore):
-    # API Anahtarını en temel haliyle yapılandır
+    # API yapılandırması
     genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
     
-    # 1. Benzer dokümanları getir
+    # RAG kısmı
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # 2. KRİTİK GÜNCELLEME: Modeli sürüm belirterek çağırıyoruz
-    # Başına 'models/' eklemek ve doğru ismi yazmak SDK'nın kafa karışıklığını giderir.
-    model = genai.GenerativeModel(model_name='gemini-pro') 
+    # MODEL ÇAĞIRMA (En güncel model ismi)
+    # 404 hatasını önlemek için doğrudan ismi yazıyoruz
+    model = genai.GenerativeModel('gemini-1.5-flash-latest') 
     
-    prompt = f"""Sen bir ilk yardım asistanısın. Bağlama göre Türkçe yanıt ver.
-    BAĞLAM: {context}
-    SORU: {query}"""
+    prompt = f"Bağlam: {context}\n\nSoru: {query}\n\nYanıtı Türkçe ver:"
 
     try:
-        # 3. Yanıtı oluştur
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
-        # Hata detaylarını daha net görmek için:
-        return f"Model hatası detayları: {str(e)}"
+        return f"Hata: {str(e)}"
 
 # --- KULLANICI ARAYÜZÜ ---
 user_input = st.text_input("Sorunuzu yazın (örn: Elimi kestim, ne yapmalıyım?):")
