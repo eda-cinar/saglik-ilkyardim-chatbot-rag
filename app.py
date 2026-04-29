@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import requests
 import json
-import google.generativeai as genai
+#import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
