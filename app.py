@@ -58,23 +58,23 @@ except Exception as e:
 def rag_answer(query, _vectorstore):
     # API Anahtarını yapılandır
     api_key = st.secrets["GOOGLE_API_KEY"]
-    genai.configure(api_key=api_key)
     
     # 1. Benzer dokümanları getir
     docs = _vectorstore.similarity_search(query, k=4)
     context = "\n".join([doc.page_content for doc in docs])
     
-    # 2. Prompt oluştur
-    prompt = f"Bağlam: {context}\nSoru: {query}\nYanıt:"
-
-    # 3. KRİTİK GÜNCELLEME: v1 sürümünü açıkça belirtiyoruz
-    # Bu satır 404 hatasını kökten çözecektir.
-    model = genai.GenerativeModel(
-        model_name='gemini-1.5-flash',
-        # Bazı SDK sürümlerinde doğrudan v1'e zorlamak için gerekebilir
+    # 2. KRİTİK DÜZELTME: v1 sürümünü açıkça zorluyoruz
+    genai.configure(
+        api_key=api_key,
+        client_options={'api_version': 'v1'} # Hata burayı v1beta olarak gördüğü için oluşuyor
     )
-    
-    # Doğrudan v1 API'sini çağırmak için alternatif (Eğer üstteki hata verirse):
+
+    prompt = f"""Sen bir ilk yardım asistanısın. Aşağıdaki bağlamı kullanarak Türkçe yanıt ver.
+    BAĞLAM: {context}
+    SORU: {query}"""
+
+    # 3. Modeli çağır
+    model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(prompt)
     
     return response.text
